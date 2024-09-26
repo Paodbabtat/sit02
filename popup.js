@@ -60,7 +60,9 @@ function exibirResultado(partes) {
 }
 
 async function traduzirTexto(texto, idiomaOrigem, idiomaDestino) {
-    const apiKey = 'SUA_CHAVE_API_AQUI'; // Substitua com sua chave
+    const apiKey = sk-qg5DUdCg58lJK16I34ndzYYPD7vBGLM2FZvsEw62TvT3BlbkFJuYqG35hCPpKrXn
+jxi1Vsrc13VtVGqnnZOLYDoSut4A
+; // Substitua com sua chave
     const url = 'https://api.openai.com/v1/chat/completions';
 
     const body = JSON.stringify({
