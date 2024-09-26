@@ -6,6 +6,9 @@
     <title>Meu site</title>
     <link rel="stylesheet" href="style.css"> <!-- Certifique-se de que o style.css está correto -->
     <script src="https://apis.google.com/js/api.js"></script> <!-- API do Google -->
+    <script type="module" src="google_drive_access.js"></script> <!-- Novo módulo de acesso ao Google Drive -->
+    <script type="module" src="google_drive_search.js"></script> <!-- Novo módulo para busca de subpastas -->
+    <script type="module" src="google_drive_images.js"></script> <!-- Novo módulo para baixar e cortar imagens -->
 </head>
 <body>
     <h1>Bem-vindo ao meu site</h1>
@@ -55,7 +58,6 @@
     </section>
 
     <script src="popup.js"></script> <!-- Script de dividir texto e traduzir -->
-    <script src="google_drive.js"></script> <!-- Script de integração com Google Drive -->
 
     <script>
         // Lógica para exibir apenas uma seção por vez
@@ -71,10 +73,17 @@
 
         // Lógica para listar subpastas da pasta F1
         document.getElementById('btnListSubPastas').addEventListener('click', function () {
-            listSubfoldersInF1(); // Usa a função do google_drive.js
+            // Função de busca das subpastas no módulo google_drive_search.js
+            import('./google_drive_search.js').then(module => {
+                module.listSubfoldersInF1();
+            });
         });
 
-        handleClientLoad(); // Inicializar a API do Google Drive ao carregar a página
+        // Chama a inicialização da API do Google Drive ao carregar a página
+        import('./google_drive_access.js').then(module => {
+            module.handleClientLoad();
+        });
     </script>
 </body>
 </html>
+
