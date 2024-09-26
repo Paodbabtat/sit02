@@ -52,17 +52,15 @@ function exibirResultado(partes) {
     const resultadoDiv = document.getElementById('resultado');
     resultadoDiv.innerHTML = ''; // Limpa o conteúdo anterior
 
-    partes.forEach(parte => {
+    partes.forEach((parte, index) => {
         const parteDiv = document.createElement('div');
-        parteDiv.textContent = parte;
+        parteDiv.textContent = `Parte ${index + 1}: ${parte}`; // Adiciona o título "Parte X"
         resultadoDiv.appendChild(parteDiv); // Adiciona cada parte à página
     });
 }
 
 async function traduzirTexto(texto, idiomaOrigem, idiomaDestino) {
-    const apiKey = sk-qg5DUdCg58lJK16I34ndzYYPD7vBGLM2FZvsEw62TvT3BlbkFJuYqG35hCPpKrXn
-jxi1Vsrc13VtVGqnnZOLYDoSut4A
-; // Substitua com sua chave
+    const apiKey = 'sk-qg5DUdCg58lJK16I34ndzYYPD7vBGLM2FZvsEw62TvT3BlbkFJuYqG35hCPpKrXn'; // Substitua com sua chave
     const url = 'https://api.openai.com/v1/chat/completions';
 
     const body = JSON.stringify({
