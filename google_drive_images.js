@@ -16,13 +16,11 @@ function processSubfolder(subfolderId, subfolderName) {
                     // Para cada imagem, baixamos e realizamos o corte
                     downloadAndCutImage(image.id, newFolderId, `${image.name}_c${index + 1}`);
                 });
-                alert(`Processando imagens da subpasta ${subfolderName}`); // Notificação de início de processamento
             });
         } else {
-            alert(`Nenhuma imagem encontrada na subpasta ${subfolderName}.`); // Notificação de aviso
+            console.log(`Nenhuma imagem encontrada na subpasta: ${subfolderName}`);
         }
     }).catch(function (error) {
-        alert('Erro ao listar imagens: ' + error); // Notificação de erro
         console.error("Erro ao listar imagens na subpasta", error);
     });
 }
@@ -37,10 +35,9 @@ function createFolderInFD(folderName) {
         },
         fields: 'id'
     }).then(function (response) {
-        alert(`Pasta ${folderName} criada com sucesso em FD!`); // Notificação de sucesso
+        console.log('Pasta criada na FD:', response.result.id);
         return response.result.id;
     }).catch(function (error) {
-        alert('Erro ao criar pasta: ' + error); // Notificação de erro
         console.error("Erro ao criar pasta na FD", error);
     });
 }
@@ -81,7 +78,6 @@ function downloadAndCutImage(fileId, newFolderId, newFileName) {
         var blob = new Blob([response.body], { type: 'image/jpeg' });
         reader.readAsDataURL(blob);
     }).catch(function (error) {
-        alert('Erro ao baixar a imagem: ' + error); // Notificação de erro
         console.error("Erro ao baixar a imagem", error);
     });
 }
@@ -106,16 +102,11 @@ function uploadCutImage(blob, folderId, fileName) {
         body: formData
     }).then(function (response) {
         if (response.ok) {
-            alert(`Imagem ${fileName} cortada e enviada para a FD com sucesso!`); // Notificação de sucesso
+            console.log('Imagem cortada e enviada para a FD:', fileName);
         } else {
-            alert('Erro ao enviar a imagem cortada'); // Notificação de erro
             console.error('Erro ao enviar a imagem cortada');
         }
     }).catch(function (error) {
-        alert('Erro na requisição de upload: ' + error); // Notificação de erro
         console.error('Erro na requisição de upload', error);
     });
 }
-
-// Exportando as funções para uso nos outros scripts
-export { processSubfolder, createFolderInFD, downloadAndCutImage, uploadCutImage };
