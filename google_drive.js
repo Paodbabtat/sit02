@@ -95,23 +95,23 @@ function downloadAndCutFile(fileId) {
             img.src = e.target.result;
 
             img.onload = function() {
-                // Aqui vamos cortar a imagem
+                // Criar o canvas para cortar a imagem
                 const canvas = document.createElement('canvas');
                 const ctx = canvas.getContext('2d');
 
-                const corteLargura = 1500; // Ajuste isso para o tamanho do corte desejado
+                const corteLargura = 1500; // Ajuste o tamanho do corte conforme necessário
                 const corteAltura = 1500;
 
                 canvas.width = corteLargura;
                 canvas.height = corteAltura;
 
-                // Desenhar a imagem cortada no canvas (ajuste os valores de corte conforme necessário)
+                // Desenhar a imagem cortada no canvas
                 ctx.drawImage(img, 0, 0, corteLargura, corteAltura, 0, 0, corteLargura, corteAltura);
 
                 // Exibir a imagem cortada
                 const cortada = new Image();
                 cortada.src = canvas.toDataURL();
-                document.getElementById('imagem_drive_cortada').innerHTML = ''; // Limpa imagens anteriores
+                document.getElementById('imagem_drive_cortada').innerHTML = ''; // Limpar imagens anteriores
                 document.getElementById('imagem_drive_cortada').appendChild(cortada);
             };
         };
