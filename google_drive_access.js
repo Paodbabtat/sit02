@@ -21,9 +21,7 @@ function initClient() {
     }).then(function () {
         gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
         updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
-        alert('Autenticação realizada com sucesso!'); // Notificação de sucesso
     }, function (error) {
-        alert('Erro ao inicializar a API Google Drive: ' + error); // Notificação de erro
         console.error("Erro ao inicializar a API Google Drive", error);
     });
 }
@@ -31,16 +29,12 @@ function initClient() {
 // Atualiza o status de autenticação
 function updateSigninStatus(isSignedIn) {
     if (isSignedIn) {
-        alert('Usuário autenticado com sucesso!'); // Notificação de sucesso
+        console.log("Usuário autenticado com sucesso.");
     } else {
         gapi.auth2.getAuthInstance().signIn().then(function () {
-            alert('Usuário autenticado com sucesso!'); // Notificação de sucesso
+            console.log("Usuário autenticado.");
         }).catch(function (error) {
-            alert('Erro na autenticação: ' + error); // Notificação de erro
             console.error("Erro na autenticação", error);
         });
     }
 }
-
-// Exportando as funções para uso nos outros scripts
-export { handleClientLoad, updateSigninStatus };
