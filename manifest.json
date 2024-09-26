@@ -1,0 +1,10 @@
+{
+  "manifest_version": 3,
+  "name": "Divisor de Texto",
+  "version": "1.0",
+  "description": "Corta texto em partes com base no número de caracteres.",
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "permissions": ["storage", "activeTab", "scripting"]
+}
