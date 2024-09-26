@@ -33,6 +33,7 @@ document.getElementById('dividir').addEventListener('click', async function () {
     exibirResultado(partesTraduzidas);
 });
 
+// Função para dividir o texto
 function dividirTexto(texto, tamanhoCorte) {
     const partes = [];
     while (texto.length > tamanhoCorte) {
@@ -48,6 +49,7 @@ function dividirTexto(texto, tamanhoCorte) {
     return partes;
 }
 
+// Função para exibir o resultado com "Parte 1", "Parte 2", etc.
 function exibirResultado(partes) {
     const resultadoDiv = document.getElementById('resultado');
     resultadoDiv.innerHTML = ''; // Limpa o conteúdo anterior
@@ -59,6 +61,7 @@ function exibirResultado(partes) {
     });
 }
 
+// Função para traduzir o texto usando a API do OpenAI
 async function traduzirTexto(texto, idiomaOrigem, idiomaDestino) {
     const apiKey = 'sk-qg5DUdCg58lJK16I34ndzYYPD7vBGLM2FZvsEw62TvT3BlbkFJuYqG35hCPpKrXn'; // Substitua com sua chave
     const url = 'https://api.openai.com/v1/chat/completions';
@@ -68,7 +71,7 @@ async function traduzirTexto(texto, idiomaOrigem, idiomaDestino) {
         messages: [
             {
                 role: "system",
-                content: `Você é um tradutor de texto. Traduza o texto de ${idiomaOrigem} para ${idiomaDestino}.`
+                content: `Traduza o texto de ${idiomaOrigem} para ${idiomaDestino}.`
             },
             {
                 role: "user",
