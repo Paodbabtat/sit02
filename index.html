@@ -9,11 +9,10 @@
 </head>
 <body>
     <h1>Bem-vindo ao meu site</h1>
-    <p>Aqui você pode usar o divisor de texto e o cortador de imagens.</p>
+    <p>Aqui você pode usar o divisor de texto e o cortador de imagens do Google Drive.</p>
 
     <!-- Botões para escolher a funcionalidade -->
     <button id="btnDivisor">Divisor e Tradutor de Texto</button>
-    <button id="btnCorte">Corte de Imagens Local</button>
     <button id="btnDrive">Corte de Imagens do Google Drive</button>
 
     <!-- Seção de Divisão e Tradução de Texto -->
@@ -47,14 +46,6 @@
         <div id="resultado"></div>
     </section>
 
-    <!-- Seção de Corte de Imagens Local -->
-    <section id="corte-imagens" style="display: none;">
-        <h2>Corte de Imagens Local</h2>
-        <input type="file" id="imagem_input" accept="image/*"><br>
-        <button id="cortar_imagem">Cortar Imagem</button>
-        <div id="imagem_cortada"></div>
-    </section>
-
     <!-- Seção de Corte de Imagens no Google Drive -->
     <section id="drive-imagens" style="display: none;">
         <h2>Corte de Imagens do Google Drive</h2>
@@ -64,26 +55,17 @@
     </section>
 
     <script src="popup.js"></script> <!-- Script de dividir texto e traduzir -->
-    <script src="imagem_corte.js"></script> <!-- Script de cortar imagens locais -->
     <script src="google_drive.js"></script> <!-- Script de integração com Google Drive -->
 
     <script>
         // Lógica para exibir apenas uma seção por vez
         document.getElementById('btnDivisor').addEventListener('click', function () {
             document.getElementById('divisor-texto').style.display = 'block';
-            document.getElementById('corte-imagens').style.display = 'none';
-            document.getElementById('drive-imagens').style.display = 'none';
-        });
-
-        document.getElementById('btnCorte').addEventListener('click', function () {
-            document.getElementById('divisor-texto').style.display = 'none';
-            document.getElementById('corte-imagens').style.display = 'block';
             document.getElementById('drive-imagens').style.display = 'none';
         });
 
         document.getElementById('btnDrive').addEventListener('click', function () {
             document.getElementById('divisor-texto').style.display = 'none';
-            document.getElementById('corte-imagens').style.display = 'none';
             document.getElementById('drive-imagens').style.display = 'block';
         });
 
