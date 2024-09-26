@@ -71,7 +71,7 @@
 
         // Lógica para listar subpastas da pasta F1
         document.getElementById('btnListSubPastas').addEventListener('click', function () {
-            listFolders(F1_FOLDER_ID);
+            listSubfoldersInF1(); // Usa a função do google_drive.js
         });
 
         handleClientLoad(); // Inicializar a API do Google Drive ao carregar a página
