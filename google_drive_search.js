@@ -1,6 +1,5 @@
 // google_drive_search.js
 
-// ID da pasta F1
 var F1_FOLDER_ID = '1yYedANca20yH4sfUy3o_52Jh-gejIhXK';
 
 // Função para listar subpastas da pasta F1
@@ -17,16 +16,10 @@ function listSubfoldersInF1() {
             });
             output += '</ul>';
             document.getElementById('content').innerHTML = output;
-            alert('Subpastas listadas com sucesso!'); // Notificação de sucesso
         } else {
-            alert('Nenhuma subpasta encontrada na pasta F1.'); // Notificação de aviso
             document.getElementById('content').innerHTML = 'Nenhuma subpasta encontrada na pasta F1.';
         }
     }).catch(function (error) {
-        alert('Erro ao listar subpastas: ' + error); // Notificação de erro
         console.error("Erro ao listar subpastas na pasta F1", error);
     });
 }
-
-// Exportando a função para uso nos outros scripts
-export { listSubfoldersInF1 };
