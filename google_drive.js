@@ -5,6 +5,7 @@ var DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/drive/v3/res
 var SCOPES = 'https://www.googleapis.com/auth/drive';
 
 var F1_FOLDER_ID = '1yYedANca20yH4sfUy3o_52Jh-gejIhXK'; // ID da pasta F1
+var FD_FOLDER_ID = '1TqOFWuxZwtdUt1yrvdrRoumwwllgVosX'; // ID da pasta FD
 
 // Inicializar a API do Google
 function handleClientLoad() {
@@ -39,52 +40,70 @@ function updateSigninStatus(isSignedIn) {
     }
 }
 
-// Função para listar subpastas na pasta F1
-function listFolders(folderId) {
+// Função para listar subpastas da pasta F1
+function listSubfoldersInF1() {
     gapi.client.drive.files.list({
-        'q': `'${folderId}' in parents and mimeType = 'application/vnd.google-apps.folder'`,
+        'q': `'${F1_FOLDER_ID}' in parents and mimeType = 'application/vnd.google-apps.folder'`,
         'fields': 'nextPageToken, files(id, name)'
     }).then(function (response) {
-        var folders = response.result.files;
-        var output = '<h3>Subpastas encontradas:</h3><ul>';
-        if (folders.length > 0) {
-            folders.forEach(function (folder) {
-                output += `<li>${folder.name} <button onclick="listFiles('${folder.id}')">Ver Arquivos</button></li>`;
+        var subfolders = response.result.files;
+        var output = '<h3>Subpastas na pasta F1:</h3><ul>';
+        if (subfolders.length > 0) {
+            subfolders.forEach(function (subfolder) {
+                output += `<li>${subfolder.name} <button onclick="processSubfolder('${subfolder.id}', '${subfolder.name}')">Processar</button></li>`;
             });
             output += '</ul>';
             document.getElementById('content').innerHTML = output;
         } else {
-            document.getElementById('content').innerHTML = 'Nenhuma subpasta encontrada.';
+            document.getElementById('content').innerHTML = 'Nenhuma subpasta encontrada na pasta F1.';
         }
     }).catch(function (error) {
-        console.error("Erro ao listar subpastas", error);
+        console.error("Erro ao listar subpastas na pasta F1", error);
     });
 }
 
-// Função para listar arquivos de imagem dentro de uma subpasta
-function listFiles(folderId) {
+// Função para acessar as imagens dentro de uma subpasta de F1 e processá-las
+function processSubfolder(subfolderId, subfolderName) {
     gapi.client.drive.files.list({
-        'q': `'${folderId}' in parents and mimeType contains 'image/'`,
+        'q': `'${subfolderId}' in parents and mimeType contains 'image/'`,
         'fields': 'nextPageToken, files(id, name, mimeType)'
     }).then(function (response) {
-        var files = response.result.files;
-        var output = '<h3>Arquivos de Imagem:</h3><ul>';
-        if (files.length > 0) {
-            files.forEach(function (file) {
-                output += `<li>${file.name} <button onclick="downloadAndCutFile('${file.id}')">Cortar</button></li>`;
+        var images = response.result.files;
+        if (images.length > 0) {
+            // Cria uma nova pasta com o nome da subpasta original dentro de FD
+            createFolderInFD(subfolderName).then(function (newFolderId) {
+                images.forEach(function (image, index) {
+                    // Para cada imagem, baixamos e realizamos o corte
+                    downloadAndCutImage(image.id, newFolderId, `${image.name}_c${index + 1}`);
+                });
             });
-            output += '</ul>';
-            document.getElementById('content').innerHTML = output;
         } else {
-            document.getElementById('content').innerHTML = 'Nenhum arquivo de imagem encontrado.';
+            console.log(`Nenhuma imagem encontrada na subpasta: ${subfolderName}`);
         }
     }).catch(function (error) {
-        console.error("Erro ao listar arquivos", error);
+        console.error("Erro ao listar imagens na subpasta", error);
     });
 }
 
-// Função para baixar e cortar o arquivo de imagem do Google Drive
-function downloadAndCutFile(fileId) {
+// Função para criar uma nova pasta na FD com o mesmo nome da subpasta original
+function createFolderInFD(folderName) {
+    return gapi.client.drive.files.create({
+        resource: {
+            'name': folderName,
+            'mimeType': 'application/vnd.google-apps.folder',
+            'parents': [FD_FOLDER_ID]
+        },
+        fields: 'id'
+    }).then(function (response) {
+        console.log('Pasta criada na FD:', response.result.id);
+        return response.result.id;
+    }).catch(function (error) {
+        console.error("Erro ao criar pasta na FD", error);
+    });
+}
+
+// Função para baixar, cortar e fazer o upload das imagens cortadas para a pasta FD
+function downloadAndCutImage(fileId, newFolderId, newFileName) {
     gapi.client.drive.files.get({
         fileId: fileId,
         alt: 'media'
@@ -108,11 +127,10 @@ function downloadAndCutFile(fileId) {
                 // Desenhar a imagem cortada no canvas
                 ctx.drawImage(img, 0, 0, corteLargura, corteAltura, 0, 0, corteLargura, corteAltura);
 
-                // Exibir a imagem cortada
-                const cortada = new Image();
-                cortada.src = canvas.toDataURL();
-                document.getElementById('imagem_drive_cortada').innerHTML = ''; // Limpar imagens anteriores
-                document.getElementById('imagem_drive_cortada').appendChild(cortada);
+                // Converter o canvas para um blob e fazer o upload para a nova pasta
+                canvas.toBlob(function (blob) {
+                    uploadCutImage(blob, newFolderId, newFileName);
+                }, 'image/jpeg');
             };
         };
 
@@ -120,6 +138,46 @@ function downloadAndCutFile(fileId) {
         var blob = new Blob([response.body], { type: 'image/jpeg' });
         reader.readAsDataURL(blob);
     }).catch(function (error) {
-        console.error("Erro ao baixar o arquivo", error);
+        console.error("Erro ao baixar a imagem", error);
+    });
+}
+
+// Função para fazer o upload da imagem cortada para a nova pasta em FD
+function uploadCutImage(blob, folderId, fileName) {
+    var metadata = {
+        'name': fileName,
+        'parents': [folderId],
+        'mimeType': 'image/jpeg'
+    };
+
+    var formData = new FormData();
+    formData.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
+    formData.append('file', blob);
+
+    fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', {
+        method: 'POST',
+        headers: {
+            'Authorization': 'Bearer ' + gapi.auth.getToken().access_token,
+        },
+        body: formData
+    }).then(function (response) {
+        if (response.ok) {
+            console.log('Imagem cortada e enviada para a FD:', fileName);
+        } else {
+            console.error('Erro ao enviar a imagem cortada');
+        }
+    }).catch(function (error) {
+        console.error('Erro na requisição de upload', error);
+    });
+}
+
+// Função para excluir a subpasta original após o processo
+function deleteFolderInF1(subfolderId) {
+    gapi.client.drive.files.delete({
+        fileId: subfolderId
+    }).then(function () {
+        console.log('Subpasta excluída de F1:', subfolderId);
+    }).catch(function (error) {
+        console.error('Erro ao excluir a subpasta', error);
     });
 }
