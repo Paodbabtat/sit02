@@ -1,0 +1,106 @@
+/* Estilização global */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0 auto;
+  padding: 20px;
+  max-width: 800px;
+  text-align: center;
+  background-color: #1c1c1c; /* Fundo escuro para destacar o conteúdo */
+  color: #fff; /* Texto principal em branco */
+}
+
+h1 {
+  color: #39ff14; /* Verde neon para destaque */
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+}
+
+h2 {
+  color: #ff073a; /* Vermelho neon para subtítulos */
+  font-size: 2rem;
+  margin-bottom: 15px;
+}
+
+/* Estilos para seções */
+section {
+  background-color: #2b2b2b; /* Fundo escuro nas seções */
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  margin-bottom: 40px;
+  display: none;
+}
+
+section.active {
+  display: block; /* Seção ativa visível */
+}
+
+/* Estilização dos botões */
+button {
+  width: 250px;
+  padding: 15px;
+  margin: 10px;
+  background-color: #ff073a; /* Vermelho neon */
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+  background-color: #ff4500; /* Tom mais claro ao passar o mouse */
+  transform: scale(1.05); /* Leve aumento ao passar o mouse */
+}
+
+/* Estilizando entradas e áreas de texto */
+textarea, input, select {
+  width: 90%;
+  margin: 10px 0;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  color: #000;
+}
+
+textarea {
+  resize: none; /* Impede o redimensionamento da área de texto */
+}
+
+/* Estilo dos resultados e imagens cortadas */
+#resultado, #imagem_cortada {
+  margin-top: 20px;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #333; /* Fundo escuro para contraste */
+  color: #39ff14; /* Texto em verde neon */
+  font-size: 16px;
+  white-space: pre-wrap; /* Mantém as quebras de linha no resultado */
+}
+
+/* Estilo da área de carregamento */
+#loading {
+  display: none;
+  font-weight: bold;
+  color: #ff073a; /* Vermelho neon */
+  margin-top: 20px;
+}
+
+/* Estilo responsivo para telas menores */
+@media (max-width: 600px) {
+  button {
+    width: 90%;
+  }
+
+  textarea, input, select {
+    width: 100%;
+  }
+
+  section {
+    padding: 15px;
+  }
+}
