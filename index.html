@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu site</title>
+    <link rel="stylesheet" href="style.css"> <!-- Certifique-se de que o style.css está correto -->
+    <script src="https://apis.google.com/js/api.js"></script> <!-- API do Google -->
+</head>
+<body>
+    <h1>Bem-vindo ao meu site</h1>
+    <p>Aqui você pode usar o divisor de texto e o cortador de imagens.</p>
+
+    <!-- Botões para escolher a funcionalidade -->
+    <button id="btnDivisor">Divisor e Tradutor de Texto</button>
+    <button id="btnCorte">Corte de Imagens Local</button>
+    <button id="btnDrive">Corte de Imagens do Google Drive</button>
+
+    <!-- Seção de Divisão e Tradução de Texto -->
+    <section id="divisor-texto" style="display: none;">
+        <h2>Divisor e Tradutor de Texto</h2>
+        <textarea id="texto" rows="5" cols="30" placeholder="Insira seu texto aqui"></textarea><br>
+        <input type="number" id="tamanho_corte" placeholder="Tamanho do corte" /><br>
+        <label for="idioma_origem">Escolha o idioma de origem:</label>
+        <select id="idioma_origem">
+            <option value="auto">Detectar automaticamente</option>
+            <option value="en">Inglês</option>
+            <option value="es">Espanhol</option>
+            <option value="fr">Francês</option>
+            <option value="de">Alemão</option>
+            <option value="pt">Português</option>
+            <option value="it">Italiano</option>
+        </select><br>
+        <label for="idioma_destino">Escolha o idioma de destino:</label>
+        <select id="idioma_destino">
+            <option value="es">Espanhol</option>
+            <option value="fr">Francês</option>
+            <option value="de">Alemão</option>
+            <option value="pt">Português</option>
+            <option value="it">Italiano</option>
+            <option value="en">Inglês</option>
+        </select><br>
+        <label>
+            <input type="checkbox" id="traduzir_check"> Traduzir o texto
+        </label><br>
+        <button id="dividir">Dividir e Traduzir Texto</button>
+        <div id="resultado"></div>
+    </section>
+
+    <!-- Seção de Corte de Imagens Local -->
+    <section id="corte-imagens" style="display: none;">
+        <h2>Corte de Imagens Local</h2>
+        <input type="file" id="imagem_input" accept="image/*"><br>
+        <button id="cortar_imagem">Cortar Imagem</button>
+        <div id="imagem_cortada"></div>
+    </section>
+
+    <!-- Seção de Corte de Imagens no Google Drive -->
+    <section id="drive-imagens" style="display: none;">
+        <h2>Corte de Imagens do Google Drive</h2>
+        <button id="btnListSubPastas">Listar Subpastas da Pasta F1</button>
+        <div id="content"></div> <!-- Aqui serão listadas as subpastas e arquivos -->
+        <div id="imagem_drive_cortada"></div> <!-- Aqui será exibido o status do upload -->
+    </section>
+
+    <script src="popup.js"></script> <!-- Script de dividir texto e traduzir -->
+    <script src="imagem_corte.js"></script> <!-- Script de cortar imagens locais -->
+    <script src="google_drive.js"></script> <!-- Script de integração com Google Drive -->
+
+    <script>
+        // Lógica para exibir apenas uma seção por vez
+        document.getElementById('btnDivisor').addEventListener('click', function () {
+            document.getElementById('divisor-texto').style.display = 'block';
+            document.getElementById('corte-imagens').style.display = 'none';
+            document.getElementById('drive-imagens').style.display = 'none';
+        });
+
+        document.getElementById('btnCorte').addEventListener('click', function () {
+            document.getElementById('divisor-texto').style.display = 'none';
+            document.getElementById('corte-imagens').style.display = 'block';
+            document.getElementById('drive-imagens').style.display = 'none';
+        });
+
+        document.getElementById('btnDrive').addEventListener('click', function () {
+            document.getElementById('divisor-texto').style.display = 'none';
+            document.getElementById('corte-imagens').style.display = 'none';
+            document.getElementById('drive-imagens').style.display = 'block';
+        });
+
+        // Lógica para listar subpastas da pasta F1
+        document.getElementById('btnListSubPastas').addEventListener('click', function () {
+            listFolders(F1_FOLDER_ID);
+        });
+
+        handleClientLoad(); // Inicializar a API do Google Drive ao carregar a página
+    </script>
+</body>
+</html>
